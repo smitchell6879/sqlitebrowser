@@ -87,6 +87,11 @@ HEADERS = \
 	./Qsci/qscilexercustom.h \
 	./Qsci/qscilexersql.h \
 	./Qsci/qscilexerjson.h \
+	./Qsci/qscilexerhtml.h \
+	./Qsci/qscilexerxml.h \
+	./Qsci/qscilexerjavascript.h \
+	./Qsci/qscilexerpython.h \
+	./Qsci/qscilexercpp.h \
 	./Qsci/qscimacro.h \
 	./Qsci/qsciprinter.h \
 	./Qsci/qscistyle.h \
@@ -160,6 +165,11 @@ SOURCES = \
     qscilexercustom.cpp \
     qscilexersql.cpp \
     qscilexerjson.cpp \
+    qscilexerhtml.cpp \
+    qscilexerxml.cpp \
+    qscilexerjavascript.cpp \
+    qscilexerpython.cpp \
+    qscilexercpp.cpp \
 	qscimacro.cpp \
 	qsciprinter.cpp \
 	qscistyle.cpp \
@@ -172,6 +182,7 @@ SOURCES = \
     ScintillaQt.cpp \
     ../lexers/LexSQL.cpp \
     ../lexers/LexJSON.cpp \
+    ../lexers/LexHTML.cpp \
 	../lexlib/Accessor.cpp \
 	../lexlib/CharacterCategory.cpp \
 	../lexlib/CharacterSet.cpp \
