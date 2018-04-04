@@ -9,6 +9,7 @@ class QTreeWidgetItem;
 class QFrame;
 class QTableWidget;
 class QSslCertificate;
+class QAbstractButton;
 
 namespace Ui {
 class PreferencesDialog;
@@ -36,8 +37,13 @@ private slots:
     void chooseRemoteCloneDirectory();
     void updatePreviewFont();
 
+    void on_buttonManageFileExtension_clicked();
+    void on_buttonBox_clicked(QAbstractButton* button);
+
 private:
     Ui::PreferencesDialog *ui;
+
+    QStringList m_dbFileExtensions;
 
     void fillLanguageBox();
     void loadColorSetting(QFrame *frame, const QString &name);

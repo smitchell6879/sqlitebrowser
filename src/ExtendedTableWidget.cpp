@@ -265,8 +265,8 @@ void ExtendedTableWidget::copy(const bool withHeaders)
                 return;
             }
 
-            // The field isn't empty. Quote data as needed and copy it to the clipboard
-            qApp->clipboard()->setText(escapeCopiedData(data.toByteArray()));
+            // The field isn't empty. Copy the text to the clipboard without quoting (for general plain text clipboard)
+            qApp->clipboard()->setText(data.toByteArray());
             return;
         }
     }
@@ -656,4 +656,41 @@ void ExtendedTableWidget::dropEvent(QDropEvent* event)
 
     model()->dropMimeData(event->mimeData(), Qt::CopyAction, index.row(), index.column(), QModelIndex());
     event->acceptProposedAction();
+}
+
+void ExtendedTableWidget::selectTableLine(int lineToSelect)
+{
+    SqliteTableModel* m = qobject_cast<SqliteTableModel*>(model());
+
+    // Are there even that many lines?
+    if(lineToSelect >= m->totalRowCount())
+        return;
+
+    QApplication::setOverrideCursor( Qt::WaitCursor );
+    // Make sure this line has already been fetched
+    while(lineToSelect >= m->rowCount() && m->canFetchMore())
+        m->fetchMore();
+
+    // Select it
+    clearSelection();
+    selectRow(lineToSelect);
+    scrollTo(currentIndex(), QAbstractItemView::PositionAtTop);
+    QApplication::restoreOverrideCursor();
+}
+
+void ExtendedTableWidget::selectTableLines(int firstLine, int count)
+{
+    SqliteTableModel* m = qobject_cast<SqliteTableModel*>(model());
+
+    int lastLine = firstLine+count-1;
+    // Are there even that many lines?
+    if(lastLine >= m->totalRowCount())
+        return;
+
+    selectTableLine(firstLine);
+
+    QModelIndex topLeft = m->index(firstLine, 0);
+    QModelIndex bottomRight = m->index(lastLine, m->columnCount()-1);
+
+    selectionModel()->select(QItemSelection(topLeft, bottomRight), QItemSelectionModel::Select | QItemSelectionModel::Rows);
 }

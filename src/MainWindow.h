@@ -18,6 +18,7 @@ class DbStructureModel;
 class RemoteDock;
 class RemoteDatabase;
 class FindReplaceDialog;
+class ExtendedTableWidget;
 
 namespace Ui {
 class MainWindow;
@@ -44,22 +45,6 @@ struct BrowseDataTableSettings
     {
     }
 
-    friend QDataStream& operator<<(QDataStream& stream, const BrowseDataTableSettings& object)
-    {
-        stream << object.sortOrderIndex;
-        stream << static_cast<int>(object.sortOrderMode);
-        stream << object.columnWidths;
-        stream << object.filterValues;
-        stream << object.displayFormats;
-        stream << object.showRowid;
-        stream << object.encoding;
-        stream << object.plotXAxis;
-        stream << object.plotYAxes;
-        stream << object.unlockViewPk;
-        stream << object.hiddenColumns;
-
-        return stream;
-    }
     friend QDataStream& operator>>(QDataStream& stream, BrowseDataTableSettings& object)
     {
         stream >> object.sortOrderIndex;
@@ -194,6 +179,8 @@ private:
     void loadExtensionsFromSettings();
     void saveAsView(QString query);
     void duplicateRecord(int currentRow);
+    void selectTableLine(int lineToSelect);
+    void attachPlot(ExtendedTableWidget* tableWidget, SqliteTableModel* model, BrowseDataTableSettings* settings = nullptr, bool keepOrResetSelection = true);
 
     sqlb::ObjectIdentifier currentlyBrowsedTableName() const;
 
@@ -213,7 +200,7 @@ public slots:
     void refresh();
     void jumpToRow(const sqlb::ObjectIdentifier& table, QString column, const QByteArray& value);
     void switchToBrowseDataTab(QString tableToBrowse = QString());
-    void populateStructure();
+    void populateStructure(const QString& old_table = QString());
 
 private slots:
     void createTreeContextMenu(const QPoint & qPoint);
@@ -224,8 +211,6 @@ private slots:
     bool fileClose();
     void addRecord();
     void deleteRecord();
-    void selectTableLine( int lineToSelect );
-    void selectTableLines(int firstLine, int count);
     void navigatePrevious();
     void navigateNext();
     void navigateBegin();
